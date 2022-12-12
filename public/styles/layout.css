@@ -6,7 +6,9 @@
 html {
   box-sizing: border-box;
 }
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -18,8 +20,38 @@ body {
   color: #545149;
   background-color: #f4f1ec;
   font-size: 24px;
+  font-family: "Source Sans Pro", sans-serif;
+  width: 100%;
 }
 
 /*
  * Additional CSS can be defined below or in other CSS files, as per instructions
  */
+
+@media only screen and (min-width: 768px) {
+}
+
+@media only screen and (min-width: 1024px) {
+  nav {
+    background-color: #4056a1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  header{
+    margin-top: 200px;
+    width: 30% !important;
+    height: 375px !important;
+  }
+  .main-container{
+    display: flex;
+    margin-top: 200px;
+    width: 80%;
+    margin: 0 auto;
+  }
+  .container{
+    margin-top: 160px;
+    width: 50%;
+  }
+}
