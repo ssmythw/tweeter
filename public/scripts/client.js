@@ -3,7 +3,6 @@
  * jQuery is already loaded
  * Reminder: Use (and do all your DOM work in) jQuery's document ready function
  */
-
 const tweetsContainer = document.getElementById("tweets-container");
 
 const data = [];
@@ -14,44 +13,53 @@ $("#my-form").submit((event) => {
   let tweetTextVal = $("#tweet-text").val();
   tweetTextVal = $("<div>").text(tweetTextVal).html();
   $("#error").slideUp("slow", function () {});
-  if (tweetTextVal.length > 140) {
-    $("#error").append("<p>Tweet cannot be longer than 140 characters</p>");
-  }
-
-  if (!tweetTextVal) {
+  if (parseInt(tweetTextVal.length) > 140) {
+    $("#error").text("Tweet cannot be longer than 140 characters");
+    $("#error").slideDown("slow", function () {});
+  } else if (!tweetTextVal) {
     $("#error").text("Tweet cannot be empty");
     $("#error").slideDown("slow", function () {});
-  }
-
-  $.ajax({
-    url: `http://localhost:8080/tweets?${tweetText}`,
-    type: "post",
-    data: tweetText,
-  })
-    .then((result) => {
-      const user = {
-        user: {
-          name: "Scott Smyth",
-          avatars: "https://i.imgur.com/73hZDYK.png",
-          handle: "@ssmy_39",
-        },
-        content: {
-          text: tweetTextVal,
-        },
-        created_at: Date.now(),
-      };
-      $("#tweet-text").val("");
-      data.unshift(user);
-      renderTweets(data);
+  } else {
+    $.ajax({
+      url: `http://localhost:8080/tweets?${tweetText}`,
+      type: "post",
+      data: tweetText,
     })
-    .catch((err) => {
-      console.log(err);
-    });
+      .then((result) => {
+        const user = {
+          user: {
+            name: "Scott Smyth",
+            avatars: "https://i.imgur.com/73hZDYK.png",
+            handle: "@ssmy_39",
+          },
+          content: {
+            text: tweetTextVal,
+          },
+          created_at: timePassed(),
+        };
+        $("#tweet-text").val("");
+        $(".counter").val(140);
+        $(".counter").css("color", "black");
+        data.unshift(user);
+        renderTweets(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 });
 
-const timePassed = (tweet) => {
-  return timeago.format(tweet.created_at);
+// Function TimePassed
+// Calculates the time since a tweet was posted.
+// Input: none; Output: Time passed since the tweet was posted in string format
+
+const timePassed = () => {
+  return timeago.format(Date.now() * 1000 * 60 * 60);
 };
+
+// Function loadTweets
+// Makes an ajax call to the backend server for the curernt tweets.
+// Input: none; Output: result tweet data from the sevrer
 
 const loadTweets = () => {
   $.ajax({
@@ -67,16 +75,21 @@ const loadTweets = () => {
     });
 };
 
+// Function renderTweets
+// renders a tweet element to the screen. Use the function createTweetElement in order to create the necessary data.
+// Input: tweets object; Output: appended tweet items to page using jquery.
+
 const renderTweets = function (tweets) {
-  // loops through tweets
   $("#tweets-container").empty();
   for (const tweet of tweets) {
-    // calls createTweetElement for each tweet
     const $tweet = createTweetElement(tweet);
-    // takes return value and appends it to the tweets container
-    $("#tweets-container").append($tweet); // to add it to the page so we can make sure it's got all the right elements, classes, etc.
+    $("#tweets-container").append($tweet);
   }
 };
+
+// Function createTweetElement
+// Creates a new tweet element using the data from the tweet element that is passed in.
+// Input: tweet object; Output: html markup for the tweet.
 
 const createTweetElement = function (tweet) {
   let $tweet = $(`<article>
@@ -96,7 +109,7 @@ const createTweetElement = function (tweet) {
         <span class="tweet">${tweet.content.text}</span>
       </div>
       <div class="footer-bottom">
-        <span>10 days ago</span>
+        <span>${tweet.created_at}</span>
         <div class="icons">
           <i class="tweetItem fas fa-flag"></i>
           <i class="tweetItem fas fa-sync"></i>
