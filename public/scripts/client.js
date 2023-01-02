@@ -3,58 +3,13 @@
  * jQuery is already loaded
  * Reminder: Use (and do all your DOM work in) jQuery's document ready function
  */
-const tweetsContainer = document.getElementById("tweets-container");
-
-const data = [];
-
-$("#my-form").submit((event) => {
-  event.preventDefault();
-  const tweetText = $("#tweet-text").serialize();
-  let tweetTextVal = $("#tweet-text").val();
-  tweetTextVal = $("<div>").text(tweetTextVal).html();
-  $("#error").slideUp("slow", function () {});
-  if (parseInt(tweetTextVal.length) > 140) {
-    $("#error").text("Tweet cannot be longer than 140 characters");
-    $("#error").slideDown("slow", function () {});
-  } else if (!tweetTextVal) {
-    $("#error").text("Tweet cannot be empty");
-    $("#error").slideDown("slow", function () {});
-  } else {
-    $.ajax({
-      url: `http://localhost:8080/tweets?${tweetText}`,
-      type: "post",
-      data: tweetText,
-    })
-      .then((result) => {
-        const user = {
-          user: {
-            name: "Scott Smyth",
-            avatars: "https://i.imgur.com/73hZDYK.png",
-            handle: "@ssmy_39",
-          },
-          content: {
-            text: tweetTextVal,
-          },
-          created_at: timePassed(),
-        };
-        $("#tweet-text").val("");
-        $(".counter").val(140);
-        $(".counter").css("color", "black");
-        data.unshift(user);
-        renderTweets(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-});
 
 // Function TimePassed
 // Calculates the time since a tweet was posted.
 // Input: none; Output: Time passed since the tweet was posted in string format
 
-const timePassed = () => {
-  return timeago.format(Date.now() * 1000 * 60 * 60);
+const timePassed = (time) => {
+  return timeago.format(time * 1000 * 60 * 60);
 };
 
 // Function loadTweets
@@ -63,12 +18,12 @@ const timePassed = () => {
 
 const loadTweets = () => {
   $.ajax({
-    url: `http://localhost:8080/tweets`,
+    url: `/tweets`,
     type: "get",
-    data: tweetText,
+    data: null,
   })
     .then((result) => {
-      console.log(result);
+      renderTweets(result.reverse());
     })
     .catch((err) => {
       console.log(err);
@@ -76,7 +31,7 @@ const loadTweets = () => {
 };
 
 // Function renderTweets
-// renders a tweet element to the screen. Use the function createTweetElement in order to create the necessary data.
+// Renders a tweet element to the screen. Use the function createTweetElement in order to create the necessary data.
 // Input: tweets object; Output: appended tweet items to page using jquery.
 
 const renderTweets = function (tweets) {
@@ -109,7 +64,7 @@ const createTweetElement = function (tweet) {
         <span class="tweet">${tweet.content.text}</span>
       </div>
       <div class="footer-bottom">
-        <span>${tweet.created_at}</span>
+        <span>${timePassed(tweet.created_at)}</span>
         <div class="icons">
           <i class="tweetItem fas fa-flag"></i>
           <i class="tweetItem fas fa-sync"></i>
@@ -121,4 +76,48 @@ const createTweetElement = function (tweet) {
   return $tweet;
 };
 
-renderTweets(data);
+const tweetsContainer = $("#tweets-container");
+const data = [];
+loadTweets();
+
+$("#my-form").submit((event) => {
+  event.preventDefault();
+  const tweetText = $("#tweet-text").serialize();
+  let tweetTextVal = $("#tweet-text").val();
+  tweetTextVal = $("<div>").text(tweetTextVal).html();
+  $("#error").slideUp("slow", function () {});
+  if (parseInt(tweetTextVal.length) > 140) {
+    $("#error").text("Tweet cannot be longer than 140 characters");
+    $("#error").slideDown("slow", function () {});
+  } else if (!tweetTextVal) {
+    $("#error").text("Tweet cannot be empty");
+    $("#error").slideDown("slow", function () {});
+  } else {
+    $.ajax({
+      url: `/tweets?${tweetText}`,
+      type: "post",
+      data: tweetText,
+    })
+      .then((result) => {
+        // const user = {
+        //   user: {
+        //     name: "Scott Smyth",
+        //     avatars: "https://i.imgur.com/73hZDYK.png",
+        //     handle: "@ssmy_39",
+        //   },
+        //   content: {
+        //     text: tweetTextVal,
+        //   },
+        //   created_at: timePassed(),
+        // };
+        $("#tweet-text").val("");
+        $(".counter").val(140);
+        // data.unshift(user);
+        // renderTweets(data);
+        loadTweets();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+});

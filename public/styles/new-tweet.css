@@ -9,7 +9,7 @@
   justify-content: space-between;
 }
 
-input {
+textarea {
   color: rgb(83, 80, 74);
   font-weight: bold;
   width: 100%;
@@ -49,14 +49,26 @@ footer .footer-bottom {
   cursor: pointer;
 }
 
-.tweet-header{
+.tweet-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.name-image{
+.name-image {
   display: flex;
   align-items: center;
   gap: 15px;
+}
+
+.black {
+  color: black;
+}
+
+.red {
+  color: red;
+}
+
+.tweetItem:hover {
+  color: gold;
 }

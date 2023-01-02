@@ -1,17 +1,6 @@
 $(document).ready(function () {
-  // --- our code goes here ---
-
-  let elementsArray = document.querySelectorAll(".tweetItem");
-  elementsArray.forEach((item) => {
-    $(item).mouseover(function () {
-      item.style.color = "gold";
-    });
-    $(item).mouseout(function () {
-      item.style.color = "rgb(83, 80, 74)";
-    });
-  });
-
-  const textarea = document.getElementById("tweet-text");
+  const textarea = $("#tweet-text");
+  let countText = $("#counter");
   $(textarea).keyup(function (e) {
     counter = e.target.value.length;
     let counterNode = this.nextSibling.nextSibling.children[1];
@@ -19,7 +8,7 @@ $(document).ready(function () {
     let count = parseInt(counterHTML);
     count -= 1;
     if (count < 0) {
-      counterNode.style.color = "red";
+      countText.addClass("red");
     }
     counterNode.innerHTML = count;
   });
