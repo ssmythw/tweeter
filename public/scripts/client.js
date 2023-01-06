@@ -61,7 +61,7 @@ const createTweetElement = function (tweet) {
     </div>
     <footer>
       <div>
-        <span class="tweet">${tweet.content.text}</span>
+        <span class="newTweet">${tweet.content.text}</span>
       </div>
       <div class="footer-bottom">
         <span>${timePassed(tweet.created_at)}</span>
@@ -99,19 +99,9 @@ $("#my-form").submit((event) => {
       data: tweetText,
     })
       .then((result) => {
-        // const user = {
-        //   user: {
-        //     name: "Scott Smyth",
-        //     avatars: "https://i.imgur.com/73hZDYK.png",
-        //     handle: "@ssmy_39",
-        //   },
-        //   content: {
-        //     text: tweetTextVal,
-        //   },
-        //   created_at: timePassed(),
-        // };
+        console.log("here");
         $("#tweet-text").val("");
-        $(".counter").val(140);
+        $(".counter").text(140);
         // data.unshift(user);
         // renderTweets(data);
         loadTweets();
