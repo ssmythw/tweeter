@@ -102,8 +102,6 @@ $("#my-form").submit((event) => {
         console.log("here");
         $("#tweet-text").val("");
         $(".counter").text(140);
-        // data.unshift(user);
-        // renderTweets(data);
         loadTweets();
       })
       .catch((err) => {
