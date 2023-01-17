@@ -35,6 +35,10 @@ article {
   margin-top: 20px;
 }
 
+article:hover {
+  box-shadow: 4px 2px 2px #4057a175;
+}
+
 footer {
   word-wrap: break-word;
 }
@@ -74,4 +78,14 @@ footer .footer-bottom {
 
 .tweetItem:hover {
   color: gold;
+}
+
+i {
+  color: #4056a1;
+}
+
+.newTweetContainer {
+  margin-top: 15px;
+  padding: 13px;
+  border-bottom: 4px solid rgb(83, 80, 74);
 }

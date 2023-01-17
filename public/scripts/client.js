@@ -9,7 +9,7 @@
 // Input: none; Output: Time passed since the tweet was posted in string format
 
 const timePassed = (time) => {
-  return timeago.format(time * 1000 * 60 * 60);
+  return timeago.format(time);
 };
 
 // Function loadTweets
@@ -60,7 +60,7 @@ const createTweetElement = function (tweet) {
       </span>
     </div>
     <footer>
-      <div>
+      <div class="newTweetContainer">
         <span class="newTweet">${tweet.content.text}</span>
       </div>
       <div class="footer-bottom">
